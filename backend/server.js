@@ -1,21 +1,19 @@
-const express = require('express');
-const mysql = require('mysql');
+require("dotenv").config()
 
+const express = require('express');
+const cors = require('cors');
+const db = require("./config/db.js")
 
 const app = express();
 
-const db = mysql.createConnection({
-    host:"localhost",
-    user:"root",
-    password:"",
-    database:"campusConnect"
-}
-)
+app.use(cors());
+app.use(express.json());
+
 
 app.get('/', (req,res)=>{
     res.send("Welcome to campusConnect")
 })
 
-app.listen(5000, ()=> {
-    console.log("connected to server")
+app.listen(3000, ()=> {
+    console.log("Server running...")
 })
