@@ -33,7 +33,11 @@ app.use('/clubs', clubRoutes);
 
 //Chatrooms
 const chatroomRoutes = require("./routes/chatrooms.js")
-app.use('/clubs', chatroomRoutes);
+app.use('/chatrooms', chatroomRoutes);
+
+//Messages
+const messageRoutes = require("./routes/messages.js")
+app.use('/chatrooms', messageRoutes);
 
 
 app.listen(3000, ()=> {
