@@ -48,6 +48,25 @@ async function postMessages(req,res) {
             [roomId, userId, message.trim()]
         );
 
+        const [messages] = await db.execute(
+            `SELECT
+                Messages.id,
+                Messages.roomId,
+                Messages.userId,
+                Messages.message,
+                Messages.createdAt,
+                Users.name AS username
+             FROM Messages
+             JOIN Users
+                ON Messages.userId = Users.id
+             WHERE Messages.id = ?`,
+            [result.insertId]
+        );
+
+        const newMessage = messages[0];
+
+        req.io.to("room"+roomId).emit("sendMessage", newMessage)
+
         res.status(201).json({
             message: "Message sent",
             messageId: result.insertId
