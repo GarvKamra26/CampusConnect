@@ -1,12 +1,10 @@
-import { useState } from 'react'
-// import './App.css'
-import socket from './socket.js'
-import { useEffect } from 'react'
-import axios from 'axios'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 import Signup from "./pages/signup.jsx"
 import Login from "./pages/login.jsx"
+import Chatrooms from "./pages/chatrooms.jsx"
+import Clubs from "./pages/clubs.jsx"
+import Events from "./pages/events.jsx"
 
 
 function App() {
@@ -15,6 +13,9 @@ function App() {
         <Routes>
             <Route path='/signup' element={<Signup />} />
             <Route path='/login' element={<Login />} />
+            <Route path='/chatrooms' element={<Chatrooms />} />
+            <Route path='/clubs' element={<Clubs />} />
+            <Route path='/events' element={<Events />} />
         </Routes>
     </BrowserRouter>
     );
