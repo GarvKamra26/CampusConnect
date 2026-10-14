@@ -63,7 +63,11 @@ async function postMessages(req,res) {
             [result.insertId]
         );
 
-        const newMessage = messages[0];
+        const newMessage = { 
+            "newMessage": messages[0],
+            "senderName": messages[0].username,
+            "senderId": messages[0].userId
+         };
 
         req.io.to("room"+roomId).emit("sendMessage", newMessage)
 

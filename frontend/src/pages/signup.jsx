@@ -3,6 +3,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "./pages.css";
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 function Signup() {
   const [name, setName] = useState("");
   const [email, setMail] = useState("");
@@ -14,7 +16,7 @@ function Signup() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/signup", {
+      const response = await axios.post(`${backendUrl}/api/auth/signup`, {
         name,
         email,
         password,

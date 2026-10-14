@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import "./pages.css";
 
 function Login() {
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [email, setMail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -11,7 +12,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/login", {
+      const response = await axios.post(`${backendUrl}/api/auth/login`, {
         email,
         password,
       });
@@ -20,9 +21,12 @@ function Login() {
 
       const token = response.data.token;
       const userId = response.data.userId;
+      const userName = response.data.name;
 
-      localStorage.setItem('authToken', token);
-      localStorage.setItem('userId', userId);
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("userName", userName);
+      window.dispatchEvent(new Event("campusconnect:auth-change"));
       
     } catch (error) {
       console.error("Login unsuccesful: ", error);
