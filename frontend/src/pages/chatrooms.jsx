@@ -3,13 +3,15 @@ import axios from "axios";
 import "./pages.css";
 import socket from '../socket.js';
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 async function fetchChatrooms() {
 
   try {
     const token = "Bearer " + localStorage.getItem('authToken');
 
     const response = await axios.get(
-      "http://localhost:3000/chatrooms",
+      `${backendUrl}/chatrooms`,
       { headers: { Authorization: token } }
     )
 
@@ -55,7 +57,7 @@ function Chatrooms() {
       const token = "Bearer " + localStorage.getItem("authToken");
 
       const response = await axios.post(
-        `http://localhost:3000/chatrooms/${selectedId}/messages`,
+        `${backendUrl}/chatrooms/${selectedId}/messages`,
         {
           message: msg
         },
@@ -67,6 +69,9 @@ function Chatrooms() {
       );
 
       console.log("Message sent:", response.data);
+
+
+
 
       setMsg("");
     } catch (error) {
@@ -105,7 +110,7 @@ function Chatrooms() {
         const token = "Bearer " + localStorage.getItem("authToken");
 
         const response = await axios.get(
-          `http://localhost:3000/chatrooms/${selectedId}/messages`,
+          `${backendUrl}/chatrooms/${selectedId}/messages`,
           {
             headers: {
               Authorization: token,
@@ -138,10 +143,19 @@ function Chatrooms() {
 
   useEffect(() => {
     const handleNewMessage = (newMessage) => {
+      const messageData = newMessage.newMessage;
+
       setMessages((prevMessages) => [
         ...prevMessages,
-        newMessage
-      ])
+        {
+          ...messageData,
+          userId: newMessage.senderId ?? messageData.userId,
+          userName:
+            newMessage.senderName ??
+            messageData.username ??
+            messageData.userName,
+        },
+      ]);
     }
 
     socket.on("sendMessage", handleNewMessage);
@@ -193,7 +207,7 @@ function Chatrooms() {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <div className="filter-pills">
+          {/* <div className="filter-pills">
             {[
               { key: "all", label: "All" },
               { key: "system", label: "System" },
@@ -208,7 +222,7 @@ function Chatrooms() {
                 {label}
               </button>
             ))}
-          </div>
+          </div> */}
         </div>
 
         {filtered.length === 0 ? (
@@ -273,13 +287,13 @@ function Chatrooms() {
                       messages.map((msg) => (
                         <div
                           key={msg.id}
-                          className={`message-bubble ${msg.userId === Number(localStorage.getItem("userId"))
+                          className={`message-bubble ${Number(msg.userId) === Number(localStorage.getItem("userId"))
                             ? "me"
                             : "them"
                             }`}
                         >
                           <div className="message-author">
-                            {msg.senderName}
+                            {msg.userName}
                           </div>
 
                           {msg.message}
